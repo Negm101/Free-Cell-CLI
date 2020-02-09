@@ -39,6 +39,7 @@ public class OrderedStack {
     public GenerateColSize size = new GenerateColSize();
 
     public Random rd = new Random();
+    ColouredSystemOutPrintln color = new ColouredSystemOutPrintln();
 
     /**
      * OrderedStack Constructor
@@ -109,21 +110,21 @@ public class OrderedStack {
     public void pilePush(String cardName, String colTo, String colFrom) {
         Character temp = cardName.charAt(0);
         // Checks if the cardName value is 1 higher than the card at the top of the pile
-        if ((temp == 'c' && (getCardValue(getTopCard(colTo)) == getCardValue(Character.toString(cardName.charAt(1))) - 1)) && colTo.equals("c")) {
+        if ((cardName.equals("cA") && pileC.isEmpty() && colTo.equals("c")) || (temp == 'c' && ((getCardValue(Character.toString(getTopCard(colTo).charAt(1))) == getCardValue(Character.toString(cardName.charAt(1))) - 1)) && colTo.equals("c"))) {
             // If move is valid it will push the card onto the desired pile
             // and pop from the column it came from
             pileC.push(cardName);
             popFrom(colFrom);
         } else if
-        ((temp == 'h' && (getCardValue(getTopCard(colTo)) == getCardValue(Character.toString(cardName.charAt(1))) - 1)) && colTo.equals("h")) {
+        ((cardName.equals("hA") && pileH.isEmpty() && colTo.equals("h")) || (temp == 'h' && ((getCardValue(Character.toString(getTopCard(colTo).charAt(1))) == getCardValue(Character.toString(cardName.charAt(1))) - 1)) && colTo.equals("h"))) {
             pileH.push(cardName);
             popFrom(colFrom);
         } else if
-        (((temp == 's' && (getCardValue(getTopCard(colTo)) == getCardValue(Character.toString(cardName.charAt(1))) - 1)) && colTo.equals("s"))) {
+        ((cardName.equals("sA") && pileS.isEmpty() && colTo.equals("s")) || ((temp == 's' &&((getCardValue(Character.toString(getTopCard(colTo).charAt(1))) == getCardValue(Character.toString(cardName.charAt(1))) - 1)) && colTo.equals("s")))) {
             pileS.push(cardName);
             popFrom(colFrom);
         } else if
-        ((temp == 'd' && (getCardValue(getTopCard(colTo)) == getCardValue(Character.toString(cardName.charAt(1))) - 1)) && colTo.equals("d")) {
+        ((cardName.equals("dA") && pileD.isEmpty() && colTo.equals("d")) || (temp == 'd' && ((getCardValue(Character.toString(getTopCard(colTo).charAt(1))) == getCardValue(Character.toString(cardName.charAt(1))) - 1)) && colTo.equals("d"))) {
             pileD.push(cardName);
             popFrom(colFrom);
         } else {

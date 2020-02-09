@@ -36,7 +36,8 @@ public class Main {
 
         // calling shuffleDeck from orderedStack to shuffle the deck
         orderedStack.shuffleDeck();
-
+        orderedStack.column9.push("s2");
+        orderedStack.column9.push("sA");
         // this loop prints out the piles and columns as long as the game is not done
         do {// Start of loop
 
