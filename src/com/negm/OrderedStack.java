@@ -1,13 +1,14 @@
 package com.negm;
 
 import java.util.*;
+
 /**
  * OrderedStack class does the following
  * 1) generates the complete deck
  * 2) shuffles the deck into columns
  * 3) handles the card moving between columns and piles
  * 4) handles user input errors and display error messages
- * */
+ */
 
 public class OrderedStack {
     public ArrayList<String> deck = new ArrayList<String>(
@@ -41,33 +42,31 @@ public class OrderedStack {
 
     /**
      * OrderedStack Constructor
-     * */
+     */
     public OrderedStack() {
     }
 
 
     /**
      * Checks whether the user wants to move to a pile or a column
-     * @param colFrom The column you wish to move the card from
+     *
+     * @param colFrom  The column you wish to move the card from
      * @param cardName The name of the card
-     * @param colTo The column you wish to move the card to
+     * @param colTo    The column you wish to move the card to
      */
     public void moveTo(String colFrom, String cardName, String colTo) {
         if (colTo.equals("h") || colTo.equals("c") || colTo.equals("s") || colTo.equals("d")) {
-            if (cardName.toLowerCase().compareTo(getTopCard(colFrom).toLowerCase()) == 0) {
-                pilePush(cardName.charAt(0) + Character.toString(cardName.charAt(1)).toUpperCase(), colTo, colFrom);
+            if (cardName.compareTo(getTopCard(colFrom)) == 0) {
+                pilePush(cardName, colTo, colFrom);
             } else
                 System.out.println("Invalid check card");
         } else if (isValidCol(colTo)) {
-            if (cardName.toLowerCase().compareTo(getTopCard(colFrom).toLowerCase()) == 0) {
-                colPush(cardName.charAt(0) + Character.toString(cardName.charAt(1)).toUpperCase(), colTo);
-                popFrom(colFrom);
-
+            if (cardName.compareTo(getTopCard(colFrom)) == 0) {
+                colPush(cardName, colTo, colFrom);
             } else
-                System.out.println("Invalid check card");
+                System.out.println("Invalid check card" + " : " + cardName + " : " + colTo);
         } else {
-            System.out.println(cardName.toLowerCase().compareTo(getTopCard(colFrom).toLowerCase()));
-            System.out.println("Invalid column or pile move");
+            System.out.println("Invalid column or pile move" + " : " + cardName);
         }
     }
 
@@ -75,19 +74,24 @@ public class OrderedStack {
     /**
      * Checks if the card you wish to move to the column follows
      * the rules and will send it to the push function if successful
-     * @param cardName  card name
-     * @param colTo  column moving to
+     *
+     * @param cardName card name
+     * @param colTo    column moving to
      */
-    public void colPush(String cardName, String colTo) {
-        if (isAllEmpty()) {
+    public void colPush(String cardName, String colTo, String colFrom) {
+        if (isAllEmpty(colTo)) {
+            System.out.println("empty");
             pushTo(colTo, cardName);
-        }
-        else if (isValidCol(colTo)) {
+            popFrom(colFrom);
+        } else if (isValidCol(colTo)) {
+            System.out.println("colPush");
             // Checks if the value of cardName is 1 lower than
             // the value of the top card of the colTo stack
             if (getCardValue(Character.toString(getTopCard(colTo).charAt(1))) == getCardValue(Character.toString(cardName.charAt(1))) + 1) {
+                System.out.println("colPush + if");
                 // If successful, it will push the cardName onto the colTo
                 pushTo(colTo, cardName);
+                popFrom(colFrom);
             } else
                 // If unsuccessful, system will print out "Illegal move"
                 System.out.println("Illegal move");
@@ -97,9 +101,10 @@ public class OrderedStack {
     /**
      * Checks if the card you wish to move to the pile follows
      * the rules and will push the cardName to the colTo will send it to the popFrom function
+     *
      * @param cardName card name
-     * @param colTo column moving to
-     * @param colFrom column moving from
+     * @param colTo    column moving to
+     * @param colFrom  column moving from
      */
     public void pilePush(String cardName, String colTo, String colFrom) {
         Character temp = cardName.charAt(0);
@@ -130,8 +135,9 @@ public class OrderedStack {
 
     /**
      * Pushes the cardName to the column
+     *
      * @param cardName card name
-     * @param colTo column moving to
+     * @param colTo    column moving to
      */
     public void pushTo(String colTo, String cardName) {
         switch (colTo) {
@@ -169,6 +175,7 @@ public class OrderedStack {
 
     /**
      * Pop the last element of selected pile/column
+     *
      * @param colFrom moving from
      * @
      */
@@ -208,6 +215,7 @@ public class OrderedStack {
 
     /**
      * Gets the top card (peek) of the selected column/pile
+     *
      * @param columnNum column number
      * @return peek of the specific file
      */
@@ -284,13 +292,13 @@ public class OrderedStack {
 
     /**
      * Returns the value of selected card
+     *
      * @param card card name
      * @return value of the card
      */
     public int getCardValue(String card) {
         System.out.println("getCardValue: " + card);
         Map<String, Integer> cardValue = new HashMap<>();
-        cardValue.put("a", 1);
         cardValue.put("A", 1);
         cardValue.put("2", 2);
         cardValue.put("3", 3);
@@ -304,9 +312,6 @@ public class OrderedStack {
         cardValue.put("J", 11);
         cardValue.put("Q", 12);
         cardValue.put("K", 13);
-        cardValue.put("j", 11);
-        cardValue.put("q", 12);
-        cardValue.put("k", 13);
         cardValue.put("0", 0);
         return cardValue.get(card);
     }
@@ -370,6 +375,7 @@ public class OrderedStack {
 
     /**
      * Rotates the selected column
+     *
      * @param colRot column number to rotate
      */
     public void colRotation(String colRot) {
@@ -487,6 +493,7 @@ public class OrderedStack {
 
     /**
      * Returns true if the game is complete
+     *
      * @return true if game is finished
      */
     public Boolean isDone() {
@@ -497,17 +504,41 @@ public class OrderedStack {
     }
 
     /**
-     * @return true if any of the columns are empty
+     * @return true if a column is empty
      */
-    public Boolean isAllEmpty() {
-        if (column1.isEmpty() || column2.isEmpty() || column3.isEmpty() || column4.isEmpty() || column5.isEmpty() || column6.isEmpty() || column7.isEmpty() || column8.isEmpty() || column9.isEmpty()) {
+    public Boolean isAllEmpty(String colTo) {
+        if (colTo.equals("1") && column1.isEmpty()) {
             return true;
-        } else
-            return false;
+        }
+        if (colTo.equals("2") && column2.isEmpty()) {
+            return true;
+        }
+        if (colTo.equals("3") && column3.isEmpty()) {
+            return true;
+        }
+        if (colTo.equals("4") && column4.isEmpty()) {
+            return true;
+        }
+        if (colTo.equals("5") && column5.isEmpty()) {
+            return true;
+        }
+        if (colTo.equals("6") && column6.isEmpty()) {
+            return true;
+        }
+        if (colTo.equals("7") && column7.isEmpty()) {
+            return true;
+        }
+        if (colTo.equals("8") && column8.isEmpty()) {
+            return true;
+        }
+        if (colTo.equals("9") && column9.isEmpty()) {
+            return true;
+        } else return false;
     }
 
     /**
      * Returns true if colTo is a valid column to move to
+     *
      * @param colTo column to check if valid
      * @return if it's a valid column to use
      */
@@ -516,5 +547,49 @@ public class OrderedStack {
             return true;
         } else
             return false;
+    }
+
+    /**
+     * Check if user input is in lower case
+     * @param cardName
+     * @return uppercase cardName
+     */
+    public String checkLowerCase(String cardName) {
+        if (cardName == "ca")
+            return "cA";
+        else if (cardName.equals("cj"))
+            return "cJ";
+        else if (cardName.equals("cq"))
+            return "cK";
+        else if (cardName.equals("ck"))
+            return "cK";
+        else if (cardName.equals("ha"))
+            return "hA";
+        else if (cardName.equals("hj"))
+            return "hJ";
+        else if (cardName.equals("hq"))
+            return "hK";
+        else if (cardName.equals("hk"))
+            return "hK";
+        else if (cardName.equals("sa"))
+            return "sA";
+        else if (cardName.equals("sj"))
+            return "sJ";
+        else if (cardName.equals("sq"))
+            return "sK";
+        else if (cardName.equals("sk"))
+            return "sK";
+        else if (cardName.equals("da"))
+            return "dA";
+        else if (cardName.equals("dj"))
+            return "dJ";
+        else if (cardName.equals("dq"))
+            return "dK";
+        else if (cardName.equals("dk"))
+            return "dK";
+        else
+            return cardName;
+
+
     }
 }

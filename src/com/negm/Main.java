@@ -78,6 +78,7 @@ public class Main {
             else {
                 cardName = input.next();
                 colTo = input.next();
+                cardName = orderedStack.checkLowerCase(cardName);
                 orderedStack.moveTo(colFrom, cardName, colTo);
             }
             // Loop ends and clears the screen
