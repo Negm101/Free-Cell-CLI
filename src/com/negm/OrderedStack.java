@@ -39,7 +39,7 @@ public class OrderedStack {
     public GenerateColSize size = new GenerateColSize();
 
     public Random rd = new Random();
-    ColouredSystemOutPrintln color = new ColouredSystemOutPrintln();
+    ColouredSystemOutPrintln colors = new ColouredSystemOutPrintln();
 
     /**
      * OrderedStack Constructor
@@ -60,14 +60,14 @@ public class OrderedStack {
             if (cardName.compareTo(getTopCard(colFrom)) == 0) {
                 pilePush(cardName, colTo, colFrom);
             } else
-                System.out.println("Invalid check card");
+                System.out.println(colors.ANSI_RED + "Invalid check card" + colors.ANSI_RESET);
         } else if (isValidCol(colTo)) {
             if (cardName.compareTo(getTopCard(colFrom)) == 0) {
                 colPush(cardName, colTo, colFrom);
             } else
-                System.out.println("Invalid check card" + " : " + cardName + " : " + colTo);
+                System.out.println(colors.ANSI_RED + "Invalid check card" + colors.ANSI_RESET);
         } else {
-            System.out.println("Invalid column or pile move" + " : " + cardName);
+            System.out.println(colors.ANSI_RED  + "Invalid column or pile move" + colors.ANSI_RESET );
         }
     }
 
@@ -81,21 +81,18 @@ public class OrderedStack {
      */
     public void colPush(String cardName, String colTo, String colFrom) {
         if (isAllEmpty(colTo)) {
-            System.out.println("empty");
             pushTo(colTo, cardName);
             popFrom(colFrom);
         } else if (isValidCol(colTo)) {
-            System.out.println("colPush");
             // Checks if the value of cardName is 1 lower than
             // the value of the top card of the colTo stack
-            if (getCardValue(Character.toString(getTopCard(colTo).charAt(1))) == getCardValue(Character.toString(cardName.charAt(1))) + 1) {
-                System.out.println("colPush + if");
+            if (getCardValue(getTopCard(colTo)) == getCardValue(cardName) + 1) {
                 // If successful, it will push the cardName onto the colTo
                 pushTo(colTo, cardName);
                 popFrom(colFrom);
             } else
                 // If unsuccessful, system will print out "Illegal move"
-                System.out.println("Illegal move");
+                System.out.println(colors.ANSI_RED + "Illegal move" + colors.ANSI_RESET);
         }
     }
 
@@ -110,26 +107,26 @@ public class OrderedStack {
     public void pilePush(String cardName, String colTo, String colFrom) {
         Character temp = cardName.charAt(0);
         // Checks if the cardName value is 1 higher than the card at the top of the pile
-        if ((cardName.equals("cA") && pileC.isEmpty() && colTo.equals("c")) || (temp == 'c' && ((getCardValue(Character.toString(getTopCard(colTo).charAt(1))) == getCardValue(Character.toString(cardName.charAt(1))) - 1)) && colTo.equals("c"))) {
+        if ((cardName.equals("cA") && pileC.isEmpty() && colTo.equals("c")) || (temp == 'c' && ((getCardValue(getTopCard(colTo)) == getCardValue(cardName) - 1)) && colTo.equals("c"))) {
             // If move is valid it will push the card onto the desired pile
             // and pop from the column it came from
             pileC.push(cardName);
             popFrom(colFrom);
         } else if
-        ((cardName.equals("hA") && pileH.isEmpty() && colTo.equals("h")) || (temp == 'h' && ((getCardValue(Character.toString(getTopCard(colTo).charAt(1))) == getCardValue(Character.toString(cardName.charAt(1))) - 1)) && colTo.equals("h"))) {
+        ((cardName.equals("hA") && pileH.isEmpty() && colTo.equals("h")) || (temp == 'h' && ((getCardValue(getTopCard(colTo)) == getCardValue(cardName) - 1)) && colTo.equals("h"))) {
             pileH.push(cardName);
             popFrom(colFrom);
         } else if
-        ((cardName.equals("sA") && pileS.isEmpty() && colTo.equals("s")) || ((temp == 's' &&((getCardValue(Character.toString(getTopCard(colTo).charAt(1))) == getCardValue(Character.toString(cardName.charAt(1))) - 1)) && colTo.equals("s")))) {
+        ((cardName.equals("sA") && pileS.isEmpty() && colTo.equals("s")) || (temp == 's' &&((getCardValue(getTopCard(colTo)) == getCardValue(cardName) -1 )) && colTo.equals("s"))) {
             pileS.push(cardName);
             popFrom(colFrom);
         } else if
-        ((cardName.equals("dA") && pileD.isEmpty() && colTo.equals("d")) || (temp == 'd' && ((getCardValue(Character.toString(getTopCard(colTo).charAt(1))) == getCardValue(Character.toString(cardName.charAt(1))) - 1)) && colTo.equals("d"))) {
+        ((cardName.equals("dA") && pileD.isEmpty() && colTo.equals("d")) || (temp == 'd' && ((getCardValue(getTopCard(colTo)) == getCardValue(cardName) -1))&& colTo.equals("d"))) {
             pileD.push(cardName);
             popFrom(colFrom);
         } else {
             // If unsuccessful it will print out "Illegal move"
-            System.out.println("Illegal move");
+            System.out.println(colors.ANSI_RED + "Illegal move" + colors.ANSI_RESET);
         }
     }
 
@@ -298,25 +295,62 @@ public class OrderedStack {
      * @return value of the card
      */
     public int getCardValue(String card) {
-        System.out.println("getCardValue: " + card);
-        Map<String, Integer> cardValue = new HashMap<>();
-        cardValue.put("A", 1);
-        cardValue.put("2", 2);
-        cardValue.put("3", 3);
-        cardValue.put("4", 4);
-        cardValue.put("5", 5);
-        cardValue.put("6", 6);
-        cardValue.put("7", 7);
-        cardValue.put("8", 8);
-        cardValue.put("9", 9);
-        cardValue.put("10", 10);
-        cardValue.put("J", 11);
-        cardValue.put("Q", 12);
-        cardValue.put("K", 13);
-        cardValue.put("0", 0);
-        return cardValue.get(card);
+        Map<String, Integer> carValue = new HashMap<>();
+        carValue.put("cA", 1);
+        carValue.put("c2", 2);
+        carValue.put("c3", 3);
+        carValue.put("c4", 4);
+        carValue.put("c5", 5);
+        carValue.put("c6", 6);
+        carValue.put("c7", 7);
+        carValue.put("c8", 8);
+        carValue.put("c9", 9);
+        carValue.put("c10", 10);
+        carValue.put("cJ", 11);
+        carValue.put("cQ", 12);
+        carValue.put("cK", 13);
+        carValue.put("dA", 1);
+        carValue.put("d2", 2);
+        carValue.put("d3", 3);
+        carValue.put("d4", 4);
+        carValue.put("d5", 5);
+        carValue.put("d6", 6);
+        carValue.put("d7", 7);
+        carValue.put("d8", 8);
+        carValue.put("d9", 9);
+        carValue.put("d10", 10);
+        carValue.put("dJ", 11);
+        carValue.put("dQ", 12);
+        carValue.put("dK", 13);
+        carValue.put("hA", 1);
+        carValue.put("h2", 2);
+        carValue.put("h3", 3);
+        carValue.put("h4", 4);
+        carValue.put("h5", 5);
+        carValue.put("h6", 6);
+        carValue.put("h7", 7);
+        carValue.put("h8", 8);
+        carValue.put("h9", 9);
+        carValue.put("h10", 10);
+        carValue.put("hJ", 11);
+        carValue.put("hQ", 12);
+        carValue.put("hK", 13);
+        carValue.put("sA", 1);
+        carValue.put("s2", 2);
+        carValue.put("s3", 3);
+        carValue.put("s4", 4);
+        carValue.put("s5", 5);
+        carValue.put("s6", 6);
+        carValue.put("s7", 7);
+        carValue.put("s8", 8);
+        carValue.put("s9", 9);
+        carValue.put("s10", 10);
+        carValue.put("sJ", 11);
+        carValue.put("sQ", 12);
+        carValue.put("sK", 13);
+        carValue.put("0", 0);
+        return carValue.get(card);
     }
-
 
     /**
      * Shuffles the copy of the deck

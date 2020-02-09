@@ -40,7 +40,7 @@ public class Main {
         orderedStack.column9.push("sA");
         // this loop prints out the piles and columns as long as the game is not done
         do {// Start of loop
-
+            System.out.println("Enter 'x' to exit   ||   Enter 'rot' + '<column number>' to rotate a column");
 
             // An if else statement to check if the game is finished
             if (orderedStack.isDone()) {
