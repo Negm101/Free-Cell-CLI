@@ -1,2 +1,2 @@
 # FreeCellFinal
-This is a freecell cli game made for a oopds project
+This is a freecell cli game made for a oopd project
